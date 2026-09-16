@@ -8,3 +8,8 @@ $otaku_app $mol_book2_catalog
 		<= Menu_links
 	Menu_links_empty $mol_paragraph
 		title \Ничего не нашлось
+	Spread* $otaku_anime
+		api <= api
+		anime_id <= anime_id* \
+		addon_tools /
+			<= Spread_close

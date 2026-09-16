@@ -1,0 +1,33 @@
+$otaku_anime $mol_page
+	api \
+	anime_id \
+	tools /
+		<= Shikimori $mol_link_iconed
+			uri <= shikimori_uri \
+			title \Шикимори
+		^ addon_tools
+	addon_tools /
+	body /
+		<= Poster $mol_image
+			uri <= poster \
+			title <= title
+		<= Stats $mol_row
+			sub /
+				<= Score $mol_labeler
+					title \Оценка
+					content /
+						<= score \
+				<= Episodes $mol_labeler
+					title \Эпизоды
+					content /
+						<= episodes 0
+				<= Aired $mol_labeler
+					title \Выход
+					content /
+						<= aired \
+		<= Genres $mol_row
+			sub <= genres /
+		<= Description $mol_text
+			text <= description \
+	Genre* $mol_chip
+		title <= genre_title* \

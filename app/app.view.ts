@@ -37,6 +37,10 @@ namespace $.$$ {
 			return this.brief( id ).russian || this.brief( id ).name
 		}
 
+		anime_id( id: string ) {
+			return id
+		}
+
 	}
 
 }
