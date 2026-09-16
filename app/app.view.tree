@@ -1,3 +1,10 @@
 $otaku_app $mol_book2_catalog
+	api \https://shikimori.io
 	menu_title \Otaku
 	param \anime
+	menu_body /
+		<= Query $mol_search
+			query? <=> query? \
+		<= Menu_links
+	Menu_links_empty $mol_paragraph
+		title \Ничего не нашлось
