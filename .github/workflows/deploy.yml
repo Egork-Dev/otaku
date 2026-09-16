@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: hyoo-ru/mam_build@master2
+      with:
+        package: 'otaku'
+        modules: 'app'
+
+    - uses: hyoo-ru/gh-deploy@v4.4.1
+      if: github.ref == 'refs/heads/main'
+      with:
+        folder: 'otaku/app/-'
