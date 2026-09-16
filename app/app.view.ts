@@ -4,6 +4,9 @@ namespace $.$$ {
 		id: $mol_schema_integer,
 		name: $mol_schema_string,
 		russian: $mol_schema_string,
+		image: $mol_schema_record({
+			preview: $mol_schema_string,
+		}),
 	}) {}
 
 	export class $otaku_app extends $.$otaku_app {
@@ -56,6 +59,10 @@ namespace $.$$ {
 
 		spread_title( id: string ) {
 			return this.brief( id ).russian || this.brief( id ).name
+		}
+
+		poster( id: string ) {
+			return this.api() + this.brief( id ).image.preview
 		}
 
 		anime_id( id: string ) {

@@ -2,6 +2,12 @@ $otaku_app $mol_book2_catalog
 	api \https://shikimori.io
 	menu_title \Otaku
 	param \anime
+	plugins /
+		<= Theme $mol_theme_auto
+	menu_tools /
+		<= Lights $mol_lights_toggle
+		<= Source $mol_link_source
+			uri \https://github.com/Egork-Dev/otaku
 	menu_body /
 		<= Mode $mol_switch
 			options *
@@ -13,6 +19,10 @@ $otaku_app $mol_book2_catalog
 		<= Menu_links
 	Menu_links_empty $mol_paragraph
 		title \Ничего не нашлось
+	menu_link_content* /
+		<= Poster* $mol_image
+			uri <= poster* \
+		<= Menu_link_title*
 	Spread* $otaku_anime
 		api <= api
 		anime_id <= anime_id* \
