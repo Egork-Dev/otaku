@@ -12,15 +12,36 @@ namespace $.$$ {
 			return this.$.$mol_state_arg.value( 'search', next ) ?? ''
 		}
 
+		mode( next?: string ) {
+			return this.$.$mol_state_arg.value( 'mode', next ) || 'catalog'
+		}
+
+		statuses( next?: Record< string, string > ): Record< string, string > {
+			return this.$.$mol_state_local.value( 'otaku_statuses', next ) ?? {}
+		}
+
+		status( id: string, next?: string ) {
+			const { [ id ]: prev = '', ... rest } = this.statuses()
+			if( next === undefined ) return prev
+			this.statuses( next ? { ... rest, [ id ]: next } : rest )
+			return next
+		}
+
+		@ $mol_mem
+		marked_ids() {
+			return Object.keys( this.statuses() )
+		}
+
 		@ $mol_mem
 		found() {
 			const query = this.query()
 			if( query ) this.$.$mol_wait_timeout( 400 )
-			return this.search( query )
+			if( this.mode() !== 'list' ) return this.search( query, [] )
+			return this.marked_ids().length ? this.search( query, this.marked_ids() ) : []
 		}
 
-		search( query: string ) {
-			const json = this.$.$mol_fetch.json( `${ this.api() }/api/animes?order=popularity&limit=50&search=${ encodeURIComponent( query ) }` )
+		search( query: string, ids: readonly string[] ) {
+			const json = this.$.$mol_fetch.json( `${ this.api() }/api/animes?order=popularity&limit=50&search=${ encodeURIComponent( query ) }&ids=${ ids }` )
 			return $mol_schema_list( $otaku_app_brief ).guard( json )
 		}
 

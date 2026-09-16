@@ -11,6 +11,12 @@ $otaku_anime $mol_page
 		<= Poster $mol_image
 			uri <= poster \
 			title <= title
+		<= Status $mol_switch
+			options *
+				watching \Смотрю
+				completed \Посмотрел
+				dropped \Бросил
+			value? <=> status? \
 		<= Stats $mol_row
 			sub /
 				<= Score $mol_labeler

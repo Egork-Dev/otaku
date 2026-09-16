@@ -3,6 +3,11 @@ $otaku_app $mol_book2_catalog
 	menu_title \Otaku
 	param \anime
 	menu_body /
+		<= Mode $mol_switch
+			options *
+				catalog \Каталог
+				list \Мой список
+			value? <=> mode? \
 		<= Query $mol_search
 			query? <=> query? \
 		<= Menu_links
@@ -11,5 +16,6 @@ $otaku_app $mol_book2_catalog
 	Spread* $otaku_anime
 		api <= api
 		anime_id <= anime_id* \
+		status? <=> status*? \
 		addon_tools /
 			<= Spread_close
