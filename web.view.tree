@@ -435,7 +435,7 @@ $otaku_app $mol_book2_catalog
 	menu_tools /
 		<= Lights $mol_lights_toggle
 		<= Source $mol_link_source
-			uri \https://github.com/
+			uri \https://github.com/Egork-Dev/otaku
 	menu_body /
 		<= Mode $mol_switch
 			options *

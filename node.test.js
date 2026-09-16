@@ -9569,7 +9569,7 @@ var $;
 		}
 		Source(){
 			const obj = new this.$.$mol_link_source();
-			(obj.uri) = () => ("https://github.com/");
+			(obj.uri) = () => ("https://github.com/Egork-Dev/otaku");
 			return obj;
 		}
 		mode(next){
