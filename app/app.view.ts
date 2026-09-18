@@ -53,6 +53,12 @@ namespace $.$$ {
 			return this.found().map( anime => String( anime.id ) )
 		}
 
+		@ $mol_mem
+		menu_links() {
+			return $mol_wire_stale( () => super.menu_links() )
+				?? Array.from( { length: 50 }, ( _, index ) => this.Skeleton( index ) )
+		}
+
 		brief( id: string ) {
 			return this.found().find( anime => String( anime.id ) === id )!
 		}
