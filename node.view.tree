@@ -67,10 +67,13 @@ $mol_pop_bubble $mol_view
 		tabindex 0
 		popover \manual
 
-$mol_hotkey $mol_plugin
+$mol_hotkey2 $mol_plugin
 	event *
 		^
 		keydown? <=> keydown? null
+	action *
+
+$mol_hotkey $mol_hotkey2
 	key *
 	mod_ctrl false
 	mod_alt false
@@ -447,6 +450,14 @@ $otaku_app $mol_book2_catalog
 		<= Menu_links
 	Menu_links_empty $mol_paragraph
 		title \Ничего не нашлось
+	Skeleton* $mol_view
+		minimal_height 88
+		attr *
+			^
+			aria-hidden true
+	Menu_item* $mol_view
+		minimal_height 88
+		sub <= menu_item_content*
 	menu_link_content* /
 		<= Poster* $mol_image
 			uri <= poster* \

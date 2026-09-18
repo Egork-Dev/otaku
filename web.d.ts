@@ -643,7 +643,7 @@ declare namespace $ {
      * Gap in CSS
      * @see https://page.hyoo.ru/#!=msdb74_bm7nsq
      */
-    let $mol_gap: Record<"text" | "space" | "block" | "blur" | "page" | "round" | "emoji", $mol_style_func<"var", unknown>>;
+    let $mol_gap: Record<"text" | "block" | "blur" | "page" | "space" | "round" | "emoji", $mol_style_func<"var", unknown>>;
 }
 
 declare namespace $ {
@@ -2312,11 +2312,30 @@ declare namespace $ {
 
 declare namespace $ {
 
-	export class $mol_hotkey extends $mol_plugin {
+	export class $mol_hotkey2 extends $mol_plugin {
 		keydown( next?: any ): any
 		event( ): ({ 
-			keydown( next?: ReturnType< $mol_hotkey['keydown'] > ): ReturnType< $mol_hotkey['keydown'] >,
+			keydown( next?: ReturnType< $mol_hotkey2['keydown'] > ): ReturnType< $mol_hotkey2['keydown'] >,
 		})  & ReturnType< $mol_plugin['event'] >
+		action( ): Record<string, any>
+	}
+	
+}
+
+//# sourceMappingURL=hotkey2.view.tree.d.ts.map
+declare namespace $.$$ {
+    /**
+     * Plugin which adds handlers for keyboard keys.
+     * @see [mol_keyboard_code](../keyboard/code/code.ts)
+     */
+    class $mol_hotkey2 extends $.$mol_hotkey2 {
+        keydown(event?: KeyboardEvent): void;
+    }
+}
+
+declare namespace $ {
+
+	export class $mol_hotkey extends $mol_hotkey2 {
 		key( ): Record<string, any>
 		mod_ctrl( ): boolean
 		mod_alt( ): boolean
@@ -2329,11 +2348,13 @@ declare namespace $ {
 declare namespace $.$$ {
     /**
      * Plugin which adds handlers for keyboard keys.
+     * @deprecated Use $mol_hotkey2
      * @see [mol_keyboard_code](../keyboard/code/code.ts)
      */
     class $mol_hotkey extends $.$mol_hotkey {
-        key(): { [key in keyof typeof $mol_keyboard_code]?: (event: KeyboardEvent) => void; };
-        keydown(event?: KeyboardEvent): void;
+        action(): {
+            [k: string]: any;
+        };
     }
 }
 
@@ -3916,6 +3937,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_wire_stale<Res>(task: () => Res): Res | undefined;
+}
+
+declare namespace $ {
 
 	type $mol_link_source__uri_otaku_app_1 = $mol_type_enforce<
 		string
@@ -3950,22 +3975,44 @@ declare namespace $ {
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $otaku_anime__api_otaku_app_7 = $mol_type_enforce<
+	type $mol_view__minimal_height_otaku_app_7 = $mol_type_enforce<
+		number
+		,
+		ReturnType< $mol_view['minimal_height'] >
+	>
+	type $mol_view__attr_otaku_app_8 = $mol_type_enforce<
+		({ 
+			'aria-hidden': boolean,
+		})  & ReturnType< $mol_view['attr'] >
+		,
+		ReturnType< $mol_view['attr'] >
+	>
+	type $mol_view__minimal_height_otaku_app_9 = $mol_type_enforce<
+		number
+		,
+		ReturnType< $mol_view['minimal_height'] >
+	>
+	type $mol_view__sub_otaku_app_10 = $mol_type_enforce<
+		ReturnType< $otaku_app['menu_item_content'] >
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $otaku_anime__api_otaku_app_11 = $mol_type_enforce<
 		ReturnType< $otaku_app['api'] >
 		,
 		ReturnType< $otaku_anime['api'] >
 	>
-	type $otaku_anime__anime_id_otaku_app_8 = $mol_type_enforce<
+	type $otaku_anime__anime_id_otaku_app_12 = $mol_type_enforce<
 		ReturnType< $otaku_app['anime_id'] >
 		,
 		ReturnType< $otaku_anime['anime_id'] >
 	>
-	type $otaku_anime__status_otaku_app_9 = $mol_type_enforce<
+	type $otaku_anime__status_otaku_app_13 = $mol_type_enforce<
 		ReturnType< $otaku_app['status'] >
 		,
 		ReturnType< $otaku_anime['status'] >
 	>
-	type $otaku_anime__addon_tools_otaku_app_10 = $mol_type_enforce<
+	type $otaku_anime__addon_tools_otaku_app_14 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $otaku_anime['addon_tools'] >
@@ -3989,6 +4036,8 @@ declare namespace $ {
 		menu_tools( ): readonly(any)[]
 		menu_body( ): readonly(any)[]
 		Menu_links_empty( ): $mol_paragraph
+		Skeleton( id: any): $mol_view
+		Menu_item( id: any): $mol_view
 		menu_link_content( id: any): readonly(any)[]
 		Spread( id: any): $otaku_anime
 	}
@@ -4163,6 +4212,7 @@ declare namespace $.$$ {
             };
         }[];
         spread_ids(): string[];
+        menu_links(): readonly $mol_view[];
         brief(id: string): {
             readonly id: number & $mol_schema_integer;
             readonly name: string;
@@ -6415,6 +6465,9 @@ declare namespace $.$$ {
         description(): string;
     }
     export {};
+}
+
+declare namespace $.$$ {
 }
 
 export = $;

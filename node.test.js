@@ -6036,7 +6036,7 @@ var $;
 })($ || ($ = {}));
 
 ;
-	($.$mol_hotkey) = class $mol_hotkey extends ($.$mol_plugin) {
+	($.$mol_hotkey2) = class $mol_hotkey2 extends ($.$mol_plugin) {
 		keydown(next){
 			if(next !== undefined) return next;
 			return null;
@@ -6044,20 +6044,11 @@ var $;
 		event(){
 			return {...(super.event()), "keydown": (next) => (this.keydown(next))};
 		}
-		key(){
+		action(){
 			return {};
 		}
-		mod_ctrl(){
-			return false;
-		}
-		mod_alt(){
-			return false;
-		}
-		mod_shift(){
-			return false;
-		}
 	};
-	($mol_mem(($.$mol_hotkey.prototype), "keydown"));
+	($mol_mem(($.$mol_hotkey2.prototype), "keydown"));
 
 
 ;
@@ -6187,27 +6178,71 @@ var $;
          * Plugin which adds handlers for keyboard keys.
          * @see [mol_keyboard_code](../keyboard/code/code.ts)
          */
-        class $mol_hotkey extends $.$mol_hotkey {
-            key() {
-                return super.key();
-            }
+        class $mol_hotkey2 extends $.$mol_hotkey2 {
             keydown(event) {
                 if (!event)
                     return;
                 if (event.defaultPrevented)
                     return;
-                let name = $mol_keyboard_code[event.keyCode];
-                if (this.mod_ctrl() !== (event.ctrlKey || event.metaKey))
-                    return;
-                if (this.mod_alt() !== event.altKey)
-                    return;
-                if (this.mod_shift() !== event.shiftKey)
-                    return;
-                const handle = this.key()[name];
-                if (handle)
-                    handle(event);
+                const key = [...new Set([
+                        ...(event.ctrlKey || event.metaKey) ? ['ctrl'] : [],
+                        ...event.altKey ? ['alt'] : [],
+                        ...event.shiftKey ? ['shift'] : [],
+                        $mol_keyboard_code[event.keyCode] ?? '?',
+                    ])].join('_');
+                this.action()[key]?.(event);
             }
         }
+        $$.$mol_hotkey2 = $mol_hotkey2;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$mol_hotkey) = class $mol_hotkey extends ($.$mol_hotkey2) {
+		key(){
+			return {};
+		}
+		mod_ctrl(){
+			return false;
+		}
+		mod_alt(){
+			return false;
+		}
+		mod_shift(){
+			return false;
+		}
+	};
+
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        /**
+         * Plugin which adds handlers for keyboard keys.
+         * @deprecated Use $mol_hotkey2
+         * @see [mol_keyboard_code](../keyboard/code/code.ts)
+         */
+        class $mol_hotkey extends $.$mol_hotkey {
+            action() {
+                const prefix = [...new Set([
+                        ...this.mod_ctrl() ? ['ctrl_'] : [],
+                        ...this.mod_alt() ? ['alt_'] : [],
+                        ...this.mod_shift() ? ['shift_'] : [],
+                    ])].join('');
+                return Object.fromEntries(Object.entries(this.key())
+                    .map(([key, val]) => [prefix + key, val]));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_hotkey.prototype, "action", null);
         $$.$mol_hotkey = $mol_hotkey;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -9633,6 +9668,18 @@ var $;
 			(obj.title) = () => ("Ничего не нашлось");
 			return obj;
 		}
+		Skeleton(id){
+			const obj = new this.$.$mol_view();
+			(obj.minimal_height) = () => (88);
+			(obj.attr) = () => ({...(this.$.$mol_view.prototype.attr.call(obj)), "aria-hidden": true});
+			return obj;
+		}
+		Menu_item(id){
+			const obj = new this.$.$mol_view();
+			(obj.minimal_height) = () => (88);
+			(obj.sub) = () => ((this.menu_item_content(id)));
+			return obj;
+		}
 		menu_link_content(id){
 			return [(this.Poster(id)), (this.Menu_link_title(id))];
 		}
@@ -9655,6 +9702,8 @@ var $;
 	($mol_mem_key(($.$otaku_app.prototype), "Poster"));
 	($mol_mem_key(($.$otaku_app.prototype), "status"));
 	($mol_mem(($.$otaku_app.prototype), "Menu_links_empty"));
+	($mol_mem_key(($.$otaku_app.prototype), "Skeleton"));
+	($mol_mem_key(($.$otaku_app.prototype), "Menu_item"));
 	($mol_mem_key(($.$otaku_app.prototype), "Spread"));
 
 
@@ -10146,6 +10195,26 @@ var $;
 
 ;
 "use strict";
+var $;
+(function ($) {
+    function $mol_wire_stale(task) {
+        try {
+            return task();
+        }
+        catch (error) {
+            if (!$mol_promise_like(error))
+                return $mol_fail_hidden(error);
+            const fiber = $mol_wire_auto();
+            if (!(fiber instanceof $mol_wire_fiber))
+                return;
+            return $mol_wire_probe(() => fiber.result());
+        }
+    }
+    $.$mol_wire_stale = $mol_wire_stale;
+})($ || ($ = {}));
+
+;
+"use strict";
 
 
 ;
@@ -10199,6 +10268,10 @@ var $;
             spread_ids() {
                 return this.found().map(anime => String(anime.id));
             }
+            menu_links() {
+                return $mol_wire_stale(() => super.menu_links())
+                    ?? Array.from({ length: 50 }, (_, index) => this.Skeleton(index));
+            }
             brief(id) {
                 return this.found().find(anime => String(anime.id) === id);
             }
@@ -10221,6 +10294,9 @@ var $;
         __decorate([
             $mol_mem
         ], $otaku_app.prototype, "spread_ids", null);
+        __decorate([
+            $mol_mem
+        ], $otaku_app.prototype, "menu_links", null);
         $$.$otaku_app = $otaku_app;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -10232,8 +10308,37 @@ var $;
     var $$;
     (function ($$) {
         $mol_style_define($otaku_app, {
+            Menu: {
+                width: '24rem',
+            },
+            Skeleton: {
+                height: '4.5rem',
+                margin: $mol_gap.text,
+                background: {
+                    color: $mol_theme.hover,
+                },
+                border: {
+                    radius: $mol_gap.round,
+                },
+            },
+            Menu_link: {
+                minWidth: 0,
+                flex: {
+                    wrap: 'nowrap',
+                },
+            },
+            Menu_link_title: {
+                minWidth: 0,
+                flex: {
+                    shrink: 1,
+                },
+            },
             Poster: {
                 width: '3rem',
+                height: '4.5rem',
+                flex: {
+                    shrink: 0,
+                },
             },
         });
     })($$ = $.$$ || ($.$$ = {}));
@@ -13095,6 +13200,24 @@ var $;
             $mol_mem
         ], $otaku_anime.prototype, "card", null);
         $$.$otaku_anime = $otaku_anime;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($otaku_anime, {
+            width: '48rem',
+            Poster: {
+                width: '14rem',
+                height: '21rem',
+                objectFit: 'contain',
+                alignSelf: 'flex-start',
+            },
+        });
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 
